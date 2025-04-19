@@ -1,38 +1,341 @@
-.App {
-  text-align: center;
+/* Reset and Base Styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f0f4f8;
+  color: #2c3e50;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  line-height: 1.6;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+body.dark-mode {
+  background-color: #1e1e2f;
+  color: #e0e0e0;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.app-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 30px 20px;
   display: flex;
   flex-direction: column;
   align-items: center;
+}
+
+h1 {
+  font-size: 2.75rem;
+  color: #007BFF;
+  margin-bottom: 20px;
+  text-align: center;
+  font-weight: bold;
+}
+
+body.dark-mode h1 {
+  color: #f2f2f2;
+}
+
+/* Dark Mode Button */
+.dark-mode-toggle {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  padding: 12px 24px;
+  font-size: 16px;
+  background: linear-gradient(135deg, #3f3d56, #2c2a4a);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: all 0.3s ease-in-out;
+}
+
+.dark-mode-toggle:hover {
+  background: linear-gradient(90deg, #53cbef 0%, #dcc66c 50%, #ffa3b6 100%);
+  color: #000;
+}
+
+.date-filter {
+  display: flex;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
+  margin: 20px 0;
+  gap: 10px;
+}
+
+.date-filter select {
+  padding: 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 16px;
+}
+
+/* Form Styling */
+form, .card {
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  padding: 25px;
+  margin: 20px 0;
+  width: 100%;
+  max-width: 600px;
+  transition: background-color 0.3s ease;
+}
+
+body.dark-mode form,
+body.dark-mode .card {
+  background-color: #2b2b3d;
+  box-shadow: 0 8px 24px rgba(255, 255, 255, 0.05);
+}
+
+form h2,
+.card h3 {
+  font-size: 1.75rem;
+  margin-bottom: 15px;
+  color: #007BFF;
+}
+
+body.dark-mode form h2,
+body.dark-mode .card h3 {
+  color: #f2f2f2;
+}
+
+/* Inputs */
+input, select, textarea {
+  width: 100%;
+  padding: 12px 14px;
+  margin-bottom: 15px;
+  font-size: 1rem;
+  border: 1px solid #d0d0d0;
+  border-radius: 6px;
+  transition: border-color 0.2s ease;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  outline: none;
+  border-color: #007BFF;
+}
+
+body.dark-mode input,
+body.dark-mode select,
+body.dark-mode textarea {
+  background-color: #444;
+  color: #fff;
+  border: 1px solid #777;
+}
+
+/* Global Buttons */
+button {
+  padding: 12px 24px;
+  background-color: #007BFF;
   color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.25s ease;
 }
 
-.App-link {
-  color: #61dafb;
+button:disabled {
+  background-color: #b0b0b0;
+  cursor: not-allowed;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
+button:hover:not(:disabled) {
+  background-color: #0056b3;
+}
+
+/* Summary */
+.summary,
+.pie-chart,
+.todo-list {
+  width: 100%;
+  max-width: 600px;
+  margin: 20px 0;
+  padding: 20px;
+  border-radius: 12px;
+  background-color: #ffffff;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.05);
+  transition: background-color 0.3s ease;
+}
+
+body.dark-mode .summary,
+body.dark-mode .pie-chart,
+body.dark-mode .todo-list {
+  background-color: #2e2e42;
+}
+
+.summary h3 {
+  margin-bottom: 10px;
+  font-size: 1.4rem;
+}
+
+/* Pie Chart */
+.pie-chart {
+  display: flex;
+  justify-content: center;
+}
+
+.pie-chart canvas {
+  width: 100% !important;
+  max-width: 400px;
+  height: auto;
+}
+
+.todo-container {
+  background-color: #fff;
+  padding: 25px 30px;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+  width: 100%;
+  max-width: 600px;
+  margin: 20px auto;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+body.dark-mode .todo-container {
+  background-color: #444;
+  color: #fff;
+}
+
+.todo-container h2 {
+  font-size: 1.8rem;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.todo-input {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.todo-input input {
+  flex: 1;
+  padding: 12px 15px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 1rem;
+  outline: none;
+  transition: border-color 0.3s;
+}
+
+.todo-input input:focus {
+  border-color: #007BFF;
+}
+
+.todo-input button {
+  padding: 12px 20px;
+  background-color: #007BFF;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.todo-input button:hover {
+  background-color: #0056b3;
+}
+
+.todo-list {
+  list-style: none;
+  padding-left: 0;
+}
+
+.todo-list li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 15px;
+  margin-bottom: 10px;
+  background-color: #f4f7fa;
+  border-radius: 8px;
+  transition: background-color 0.3s ease;
+}
+
+body.dark-mode .todo-list li {
+  background-color: #555;
+}
+
+.todo-list li span {
+  flex: 1;
+  cursor: pointer;
+  transition: text-decoration 0.3s, color 0.3s;
+}
+
+.todo-list li.completed span {
+  text-decoration: line-through;
+  color: #888;
+}
+
+.todo-list li button {
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.todo-list li button:hover {
+  background-color: #b02a37;
+}
+
+.empty {
+  text-align: center;
+  color: #888;
+  margin-top: 20px;
+  font-style: italic;
+}
+
+body.dark-mode .empty {
+  color: #ccc;
+}
+
+
+/* Savings Summary */
+.savings-summary ul {
+  list-style-type: none;
+  padding-left: 0;
+  margin-top: 10px;
+}
+
+.savings-summary li {
+  padding: 5px 0;
+}
+
+/* Notification Section */
+.notification-manager {
+  margin-top: 20px;
+  max-width: 600px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .app-container {
+    padding: 10px;
   }
-  to {
-    transform: rotate(360deg);
+
+  h1 {
+    font-size: 2rem;
+  }
+
+  form,
+  .summary,
+  .card,
+  .todo-list,
+  .pie-chart {
+    padding: 15px;
   }
 }
