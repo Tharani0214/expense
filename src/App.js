@@ -1,11 +1,6 @@
-// App.js
 import React, { useState, useEffect } from 'react';
 import { auth, googleProvider } from './firebase';
-import {
-  signInWithPopup,
-  signOut,
-  onAuthStateChanged,
-} from 'firebase/auth';
+import { signInWithPopup, signOut, onAuthStateChanged } from 'firebase/auth';
 
 import IncomeForm from './components/IncomeForm';
 import ExpenseForm from './components/ExpenseForm';
@@ -21,17 +16,10 @@ import './App.css';
 
 const App = () => {
   const [savings, setSavings] = useState([]);
-  const [transactions, setTransactions] = useState(() => {
-    const data = localStorage.getItem('expense-tracker-data');
-    return data ? JSON.parse(data) : [];
-  });
+  const [transactions, setTransactions] = useState([]);
   const [filterDate, setFilterDate] = useState(new Date());
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [user, setUser] = useState(null);
-
-  useEffect(() => {
-    localStorage.setItem('expense-tracker-data', JSON.stringify(transactions));
-  }, [transactions]);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
@@ -41,7 +29,13 @@ const App = () => {
     return unsubscribe;
   }, []);
 
-  const addTransaction = (transaction) => {
+  const addNewTransaction = (transaction) => {
+    const { date } = transaction;
+    // Check if the date is valid
+    if (!date || isNaN(new Date(date).getTime())) {
+      alert('Invalid date. Please provide a valid date for the transaction.');
+      return;
+    }
     setTransactions([...transactions, transaction]);
   };
 
@@ -55,25 +49,15 @@ const App = () => {
 
   const handleExport = () => {
     if (filtered.length === 0) {
-      alert("No data to export for the selected month.");
+      alert('No data to export for the selected month.');
       return;
     }
 
+    // Export the filtered data to Excel (Ensure export function does not clear the state)
     exportToExcel(filtered);
 
-    // Remove only the exported month's transactions
-    const remaining = transactions.filter((txn) => {
-      const txnDate = new Date(txn.date);
-      return !(
-        txnDate.getMonth() === filterDate.getMonth() &&
-        txnDate.getFullYear() === filterDate.getFullYear()
-      );
-    });
-
-    setTransactions(remaining);
-    localStorage.setItem('expense-tracker-data', JSON.stringify(remaining));
-
-    alert("Excel downloaded! Transactions for the selected month have been cleared.");
+    // Data should not be cleared after export
+    alert('Excel downloaded!');
   };
 
   const handleGoogleSignIn = async () => {
@@ -110,8 +94,8 @@ const App = () => {
           <p>Welcome, {user.displayName}!</p>
           <button onClick={handleLogout}>Logout</button>
           <DateFilter date={filterDate} onChange={setFilterDate} />
-          <IncomeForm onAdd={addTransaction} />
-          <ExpenseForm onAdd={addTransaction} />
+          <IncomeForm onAdd={addNewTransaction} />
+          <ExpenseForm onAdd={addNewTransaction} />
           <SavingsForm savings={savings} setSavings={setSavings} />
           <ToDoList />
           <Summary transactions={filtered} />
