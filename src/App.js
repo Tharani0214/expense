@@ -1,6 +1,4 @@
-import React, { useState, useEffect } from 'react';
-import { auth, googleProvider } from './firebase';
-import { signInWithPopup, signOut, onAuthStateChanged } from 'firebase/auth';
+import React, { useState } from 'react';
 
 import IncomeForm from './components/IncomeForm';
 import ExpenseForm from './components/ExpenseForm';
@@ -18,20 +16,9 @@ const App = () => {
   const [savings, setSavings] = useState([]);
   const [transactions, setTransactions] = useState([]);
   const [filterDate, setFilterDate] = useState(new Date());
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [user, setUser] = useState(null);
-
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      setUser(currentUser);
-      setIsLoggedIn(!!currentUser);
-    });
-    return unsubscribe;
-  }, []);
 
   const addNewTransaction = (transaction) => {
     const { date } = transaction;
-    // Check if the date is valid
     if (!date || isNaN(new Date(date).getTime())) {
       alert('Invalid date. Please provide a valid date for the transaction.');
       return;
@@ -52,58 +39,23 @@ const App = () => {
       alert('No data to export for the selected month.');
       return;
     }
-
-    // Export the filtered data to Excel (Ensure export function does not clear the state)
     exportToExcel(filtered);
-
-    // Data should not be cleared after export
     alert('Excel downloaded!');
-  };
-
-  const handleGoogleSignIn = async () => {
-    try {
-      const result = await signInWithPopup(auth, googleProvider);
-      setUser(result.user);
-      setIsLoggedIn(true);
-    } catch (error) {
-      console.error('Google Sign-In Error:', error.message);
-    }
-  };
-
-  const handleLogout = async () => {
-    try {
-      await signOut(auth);
-      setUser(null);
-      setIsLoggedIn(false);
-    } catch (error) {
-      console.error('Logout Error:', error.message);
-    }
   };
 
   return (
     <div className="app-container">
-      {!isLoggedIn ? (
-        <div className="login-container">
-          <h2>Sign in to Finance Tracker</h2>
-          <button onClick={handleGoogleSignIn}>Sign in with Google</button>
-        </div>
-      ) : (
-        <>
-          <DarkModeToggle />
-          <h1>Finance Tracker</h1>
-          <p>Welcome, {user.displayName}!</p>
-          <button onClick={handleLogout}>Logout</button>
-          <DateFilter date={filterDate} onChange={setFilterDate} />
-          <IncomeForm onAdd={addNewTransaction} />
-          <ExpenseForm onAdd={addNewTransaction} />
-          <SavingsForm savings={savings} setSavings={setSavings} />
-          <ToDoList />
-          <Summary transactions={filtered} />
-          <PieChart transactions={filtered} />
-          <NotificationManager />
-          <button onClick={handleExport}>Export to Excel</button>
-        </>
-      )}
+      <DarkModeToggle />
+      <h1>Finance Tracker</h1>
+      <DateFilter date={filterDate} onChange={setFilterDate} />
+      <IncomeForm onAdd={addNewTransaction} />
+      <ExpenseForm onAdd={addNewTransaction} />
+      <SavingsForm savings={savings} setSavings={setSavings} />
+      <ToDoList />
+      <Summary transactions={filtered} />
+      <PieChart transactions={filtered} />
+      <NotificationManager />
+      <button onClick={handleExport}>Export to Excel</button>
     </div>
   );
 };
