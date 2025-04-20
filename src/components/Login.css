@@ -12,8 +12,10 @@ h2 {
   font-size: 2rem;
   margin-bottom: 20px;
   color: #333;
+  font-weight: bold;
 }
 
+/* Input Container */
 .input-container {
   margin: 10px 0;
   width: 300px;
@@ -21,21 +23,30 @@ h2 {
 
 input {
   width: 100%;
-  padding: 10px;
-  border-radius: 5px;
+  padding: 12px;
+  border-radius: 8px;
   border: 1px solid #ccc;
   font-size: 1rem;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
+input:focus {
+  outline: none;
+  border-color: #007BFF;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.4);
+}
+
+/* Button Styles */
 button {
-  padding: 10px 20px;
+  padding: 12px 20px;
   background-color: #007BFF;
   color: white;
   border: none;
-  border-radius: 5px;
+  border-radius: 8px;
   font-size: 1rem;
   cursor: pointer;
   width: 100%;
+  transition: background-color 0.3s ease, transform 0.3s ease;
 }
 
 button:disabled {
@@ -43,24 +54,57 @@ button:disabled {
   cursor: not-allowed;
 }
 
+button:hover:not(:disabled) {
+  background-color: #0056b3;
+  transform: scale(1.05);
+}
+
+button:active {
+  background-color: #003c8f;
+}
+
+/* Google Sign-In Button */
+.google-signin-btn {
+  padding: 12px 20px;
+  background-color: #4285f4;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  width: 100%;
+  margin-top: 20px;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.google-signin-btn:hover {
+  background-color: #357ae8;
+  transform: scale(1.05);
+}
+
+.google-signin-btn:active {
+  background-color: #2a56c6;
+}
+
+/* Error Message */
 .error-message {
   color: red;
   margin-bottom: 10px;
   font-size: 1rem;
+  text-align: center;
 }
 
-/* Add Google Sign-In Button Styles */
-button {
-  padding: 10px 20px;
-  background-color: #4285f4;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  font-size: 1rem;
-  cursor: pointer;
-  margin-top: 20px;
-}
+/* Responsive Design */
+@media (max-width: 600px) {
+  .login-container {
+    padding: 0 20px;
+  }
 
-button:hover {
-  background-color: #357ae8;
+  .input-container {
+    width: 100%;
+  }
+
+  h2 {
+    font-size: 1.75rem;
+  }
 }
